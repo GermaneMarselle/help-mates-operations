@@ -1,0 +1,9 @@
+{
+  "name": "Help Mates Trip Calculator",
+  "short_name": "Trip Calculator",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7f4fa",
+  "theme_color": "#5b2c83",
+  "description": "Quick trip profitability calculator for Help Mates Delivery & Transport."
+}

@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#5a2a7a">
+<title>Help Mates Temporary Dispatch App</title>
+<style>
+:root{
+  --purple:#5a2a7a; --purple2:#8a55ad; --lav:#f4eef8;
+  --green:#248653; --yellow:#f3cc58; --red:#b33a3a; --blue:#2f6fb0;
+  --ink:#26222b; --muted:#6e6873; --card:#fff; --line:#e5ddea;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f8f6fa;color:var(--ink)}
+header{background:linear-gradient(135deg,var(--purple),var(--purple2));color:#fff;padding:18px 16px}
+header h1{margin:0;font-size:1.35rem}
+header p{margin:5px 0 0;opacity:.95}
+main{max-width:850px;margin:auto;padding:14px 14px 80px}
+.topnav{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.navbtn{border:1px solid var(--line);background:#fff;border-radius:16px;padding:15px;font-weight:800;font-size:1rem}
+.navbtn.active{outline:3px solid #d9c3e8}
+.panel{display:none}
+.panel.active{display:block}
+.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-bottom:14px;box-shadow:0 6px 18px rgba(45,25,60,.06)}
+h2{margin:0 0 12px;color:var(--purple);font-size:1.2rem}
+h3{margin:0;font-size:1.05rem}
+label{display:block;font-weight:800;margin:10px 0 6px}
+input,select,textarea{
+ width:100%;padding:12px;border:1.5px solid #cfc5d6;border-radius:12px;font-size:1rem;background:#fff
+}
+textarea{min-height:70px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{width:100%;border:0;border-radius:13px;padding:13px;font-weight:900;font-size:1rem;margin-top:12px}
+.primary{background:var(--purple);color:#fff}.green{background:var(--green);color:#fff}.secondary{background:#eee7f3;color:var(--purple)}.danger{background:#f8e7e7;color:var(--red)}
+.driver-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px}
+.driver-badge{font-size:.82rem;color:var(--muted)}
+.trip{
+ border:1px solid var(--line);border-radius:15px;padding:12px;margin:10px 0;background:#fcfbfd
+}
+.trip-top{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.trip-name{font-weight:900;font-size:1.05rem}
+.trip-info{margin-top:7px;line-height:1.45}
+.status{display:inline-block;padding:5px 9px;border-radius:99px;font-size:.78rem;font-weight:900}
+.scheduled{background:#ece8f0;color:#5c5264}.driving{background:#e5eff9;color:#275d91}
+.onboard{background:#fff3c8;color:#7a5c00}.waiting{background:#fdebd3;color:#8c5316}
+.completed{background:#e4f5eb;color:#17603a}.cancelled{background:#fbe6e6;color:#982d2d}
+.trip-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px}
+.smallbtn{border:0;border-radius:10px;padding:9px 6px;font-size:.78rem;font-weight:800;background:#eee7f3;color:var(--purple)}
+.empty{color:var(--muted);font-size:.9rem}
+.result{background:#f5eff8;border-radius:14px;padding:14px;margin-top:12px}
+.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line)}
+.big{text-align:center;font-size:2rem;font-weight:900}
+footer{text-align:center;color:var(--muted);font-size:.78rem;margin-top:20px}
+@media(max-width:560px){.grid2{grid-template-columns:1fr}.trip-actions{grid-template-columns:1fr 1fr}.topnav{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Help Mates Temporary Dispatch App</h1>
+  <p>Daily scheduling and trip profit checking</p>
+</header>
+<main>
+  <div class="topnav">
+    <button class="navbtn active" onclick="showPanel('dispatch',this)">📅 Today’s Dispatch</button>
+    <button class="navbtn" onclick="showPanel('profit',this)">💰 Trip Profit</button>
+  </div>
+
+  <section id="dispatch" class="panel active">
+    <div class="card">
+      <h2>Today’s Dispatch</h2>
+      <div class="grid2">
+        <div><label>Date</label><input id="dispatchDate" type="date"></div>
+        <div><label>Driver</label>
+          <select id="driverSelect">
+            <option>Germane</option>
+            <option>Tyketia</option>
+            <option>Tricia</option>
+            <option>Melvin</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div><label>Service Type</label>
+          <select id="serviceType">
+            <option>Ambulatory</option>
+            <option>Wheelchair</option>
+          </select>
+        </div>
+        <div><label>Broker</label>
+          <select id="broker">
+            <option>MTM</option>
+            <option>MediDrive</option>
+            <option>Modivcare</option>
+            <option>Private Pay</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid2">
+        <div><label>Member / Trip Name</label><input id="member" placeholder="Example: Clara"></div>
+        <div><label>Pickup Time</label><input id="pickupTime" type="time"></div>
+      </div>
+      <div class="grid2">
+        <div><label>Appointment Time</label><input id="apptTime" type="time"></div>
+        <div><label>Destination</label><input id="destination" placeholder="Example: Roanoke"></div>
+      </div>
+      <label>Trip Note</label><textarea id="tripNote" placeholder="Example: Red Oak to Danville, return home, wheelchair, wait time, etc."></textarea>
+      <button class="btn green" onclick="addTrip()">ADD TRIP TO TODAY’S DISPATCH</button>
+    </div>
+    <div id="dispatchBoard"></div>
+  </section>
+
+  <section id="profit" class="panel">
+    <div class="card">
+      <h2>Trip Profit Calculator</h2>
+      <div class="grid2">
+        <div><label>Vehicle</label>
+          <select id="vehicle">
+            <option value="22">Honda Odyssey #1</option>
+            <option value="22">Honda Odyssey #2</option>
+            <option value="22">Toyota Sienna</option>
+            <option value="18">Dodge Caravan / Wheelchair Van</option>
+          </select>
+        </div>
+        <div><label>Trip Payment ($)</label><input id="tripPay" type="number" step="0.01"></div>
+      </div>
+      <div class="grid2">
+        <div><label>Driver Pay ($)</label><input id="driverPay" type="number" step="0.01"></div>
+        <div><label>Other Cost ($)</label><input id="otherCost" type="number" step="0.01" value="0"></div>
+      </div>
+      <div class="grid2">
+        <div><label>Paid / Loaded Miles</label><input id="loadedMiles" type="number" step="0.1"></div>
+        <div><label>Deadhead Miles</label><input id="deadheadMiles" type="number" step="0.1"></div>
+      </div>
+      <label>Gas Price per Gallon ($)</label><input id="gasPrice" type="number" step="0.01" value="3.10">
+      <button class="btn primary" onclick="calculateProfit()">CALCULATE TRIP</button>
+      <div id="profitResult"></div>
+    </div>
+  </section>
+
+  <footer>Trips are saved in this browser on this device. Keep opening the same file in the same browser.</footer>
+</main>
+<script>
+function $(id){return document.getElementById(id)}
+function today(){return new Date().toISOString().slice(0,10)}
+function money(n){return '$'+(Number(n)||0).toFixed(2)}
+function getTrips(){try{return JSON.parse(localStorage.getItem('hmTempTrips')||'[]')}catch(e){return []}}
+function setTrips(v){localStorage.setItem('hmTempTrips',JSON.stringify(v))}
+function showPanel(id,btn){
+ document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+ document.querySelectorAll('.navbtn').forEach(b=>b.classList.remove('active'));
+ $(id).classList.add('active');btn.classList.add('active');
+}
+function fmtTime(t){
+ if(!t)return '';
+ const [h,m]=t.split(':'); let hh=parseInt(h); const ap=hh>=12?'PM':'AM'; hh=hh%12||12;
+ return hh+':'+m+' '+ap;
+}
+function addTrip(){
+ const member=$('member').value.trim();
+ if(!member){alert('Please enter the member or trip name.');return}
+ const trips=getTrips();
+ trips.push({
+   id:Date.now(),date:$('dispatchDate').value||today(),driver:$('driverSelect').value,
+   service:$('serviceType').value,broker:$('broker').value,member,
+   pickup:$('pickupTime').value,appt:$('apptTime').value,destination:$('destination').value.trim(),
+   note:$('tripNote').value.trim(),status:'Scheduled'
+ });
+ setTrips(trips);
+ ['member','pickupTime','apptTime','destination','tripNote'].forEach(id=>$(id).value='');
+ renderBoard();
+}
+function setStatus(id,status){
+ const trips=getTrips(); const t=trips.find(x=>x.id===id); if(t)t.status=status;
+ setTrips(trips);renderBoard();
+}
+function deleteTrip(id){
+ if(!confirm('Delete this trip?'))return;
+ setTrips(getTrips().filter(x=>x.id!==id));renderBoard();
+}
+function statusClass(s){return s.toLowerCase().replace(' ','')}
+function renderBoard(){
+ const date=$('dispatchDate').value||today();
+ const trips=getTrips().filter(x=>x.date===date);
+ const drivers=['Germane','Tyketia','Tricia','Melvin','Other'];
+ $('dispatchBoard').innerHTML=drivers.map(driver=>{
+   const items=trips.filter(x=>x.driver===driver);
+   if(!items.length)return '';
+   return `<div class="card">
+     <div class="driver-head"><h3>${driver}</h3><div class="driver-badge">${items.length} trip${items.length===1?'':'s'}</div></div>
+     ${items.sort((a,b)=>(a.pickup||'99:99').localeCompare(b.pickup||'99:99')).map(t=>`
+       <div class="trip">
+         <div class="trip-top">
+           <div>
+             <div class="trip-name">${t.member} ${t.service==='Wheelchair'?'♿':'🚐'}</div>
+             <div class="trip-info">
+               ${t.broker?'<b>'+t.broker+'</b><br>':''}
+               ${t.pickup?'Pickup: '+fmtTime(t.pickup)+'<br>':''}
+               ${t.appt?'Appointment: '+fmtTime(t.appt)+'<br>':''}
+               ${t.destination?'Destination: '+t.destination+'<br>':''}
+               ${t.note?t.note:''}
+             </div>
+           </div>
+           <span class="status ${statusClass(t.status)}">${t.status}</span>
+         </div>
+         <div class="trip-actions">
+           <button class="smallbtn" onclick="setStatus(${t.id},'Driving')">Driving</button>
+           <button class="smallbtn" onclick="setStatus(${t.id},'On Board')">On Board</button>
+           <button class="smallbtn" onclick="setStatus(${t.id},'Waiting')">Waiting</button>
+           <button class="smallbtn" onclick="setStatus(${t.id},'Completed')">Completed</button>
+           <button class="smallbtn" onclick="setStatus(${t.id},'Cancelled')">Cancelled</button>
+           <button class="smallbtn" onclick="deleteTrip(${t.id})">Delete</button>
+         </div>
+       </div>`).join('')}
+   </div>`;
+ }).join('') || '<div class="card"><p class="empty">No trips added for this date yet.</p></div>';
+}
+function calculateProfit(){
+ const mpg=parseFloat($('vehicle').value)||0, pay=parseFloat($('tripPay').value)||0;
+ const driver=parseFloat($('driverPay').value)||0, other=parseFloat($('otherCost').value)||0;
+ const loaded=parseFloat($('loadedMiles').value)||0, dead=parseFloat($('deadheadMiles').value)||0;
+ const gasPrice=parseFloat($('gasPrice').value)||0, total=loaded+dead;
+ if(pay<=0||total<=0||gasPrice<=0){alert('Please enter trip payment, miles, and gas price.');return}
+ const gallons=total/mpg, gas=gallons*gasPrice, remaining=pay-driver-gas-other;
+ const deadPct=dead/total*100, remainMile=remaining/total;
+ let label='WEAK TRIP', cls='cancelled';
+ if(remaining<0)label='DECLINE';
+ else if(remainMile>=1.25&&deadPct<=30){label='STRONG TRIP';cls='completed'}
+ else if(remainMile>=0.85){label='ACCEPTABLE — REVIEW';cls='onboard'}
+ $('profitResult').innerHTML=`<div class="result">
+   <div class="big">${money(remaining)}</div>
+   <div style="text-align:center;margin:8px"><span class="status ${cls}">${label}</span></div>
+   <div class="row"><span>Total Miles</span><b>${total.toFixed(1)}</b></div>
+   <div class="row"><span>Gas Cost</span><b>${money(gas)}</b></div>
+   <div class="row"><span>Gallons Needed</span><b>${gallons.toFixed(2)}</b></div>
+   <div class="row"><span>Remaining per Mile</span><b>${money(remainMile)}</b></div>
+   <div class="row"><span>Deadhead</span><b>${deadPct.toFixed(1)}%</b></div>
+ </div>`;
+}
+$('dispatchDate').value=today();
+$('dispatchDate').addEventListener('change',renderBoard);
+renderBoard();
+</script>
+</body>
+</html>
